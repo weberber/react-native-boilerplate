@@ -18,13 +18,14 @@ const styles = StyleSheet.create({
   }
 });
 
-@connect(
-  state => ({
-    counter: state.counter
-  }),
-  dispatch => bindActionCreators(CounterActions, dispatch)
-)
-export default class CounterContainer extends Component {
+// @connect(
+//   state => ({
+//     counter: state.counter
+//   }),
+//   dispatch => bindActionCreators(CounterActions, dispatch)
+// )
+
+class CounterContainer extends Component {
   static propTypes = {
     navigate: PropTypes.func.isRequired
   };
@@ -45,3 +46,16 @@ export default class CounterContainer extends Component {
     );
   }
 }
+
+function injectPropsFromStore(state) {
+  console.log(state);
+  return {
+    counter: state.counter
+  };
+}
+
+const injectPropsFromActions = {
+  ...CounterActions,
+};
+
+export default connect(injectPropsFromStore, injectPropsFromActions)(CounterContainer);
