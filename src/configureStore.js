@@ -4,10 +4,18 @@ import Immutable from 'immutable';
 import { Platform } from 'react-native';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import reducer from './reducers';
+import { combineReducers } from 'redux';
+import * as reducers from './reducers';
 import * as actionCreators from './actions/counter';
+import promise from 'redux-promise';
+import createLogger from 'redux-logger';
 
-const middlewares = [thunk];
+const logger = createLogger();
+
+const rootReducer = combineReducers(reducers);
+
+const middlewares = [thunk, promise, logger];
+
 
 let enhancer;
 let updateStore = f => f;
@@ -32,11 +40,11 @@ if (__DEV__) {
 }
 
 export default function configureStore(initialState) {
-  const store = createStore(reducer, initialState, enhancer);
+  const store = createStore(rootReducer, initialState, enhancer);
   updateStore(store);
   if (module.hot) {
     module.hot.accept(() => {
-      store.replaceReducer(require('./reducers').default);
+      store.replaceReducer(rootReducer/*require('./reducers').default*/);
     });
   }
   return store;

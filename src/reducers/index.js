@@ -1,8 +1,2 @@
-import { combineReducers } from 'redux';
-import counter from './counter';
-import routes from './routes';
-
-export default combineReducers({
-  counter,
-  routes
-});
+export * from './counter';
+export * from './routes';
